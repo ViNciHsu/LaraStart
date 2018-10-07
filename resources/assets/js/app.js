@@ -11,6 +11,19 @@ window.Vue = require('vue');
 import moment from 'moment';
 import { Form, HasError, AlertError } from 'vform';
 
+// SweetAlert2
+import swal from 'sweetalert2'
+window.swal = swal;
+
+const toast = swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+});
+window.toast = toast; // 之後都可以自由引用
+
+
 
 window.Form = Form; // Form指import的Form,window.Form,F要大寫,Users.vue在NewForm時才會成功
 Vue.component(HasError.name, HasError)

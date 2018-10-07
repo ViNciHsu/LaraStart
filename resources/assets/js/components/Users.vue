@@ -133,9 +133,15 @@
                 this.$Progress.start()
                 // submit the form via a POST request
                 this.form.post('api/user');
+
+                $('#addNew').modal('hide')
+                toast({
+                    type: 'success',
+                    title: 'User Created in successfully'
+                })
+
                 // Progress bar finish
                 this.$Progress.finish()
-
             }
         },
         created() {
