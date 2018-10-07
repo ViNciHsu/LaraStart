@@ -8,7 +8,9 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import moment from 'moment';
 import { Form, HasError, AlertError } from 'vform';
+
 
 window.Form = Form; // Form指import的Form,window.Form,F要大寫,Users.vue在NewForm時才會成功
 Vue.component(HasError.name, HasError)
@@ -31,7 +33,15 @@ const router = new VueRouter({
     routes // short for `routes: routes`
 })
 
+// 在.vue檔案中,只要調用upText,就能將字母第一個字顯示改成大寫
+Vue.filter('upText', function (text) {
+    // https://vuejs.org/v2/guide/filters.html#ad
+    return text.charAt(0).toUpperCase() + text.slice(1)
+});
 
+Vue.filter('myDate',function (created) {
+    return moment(created).format('MMMM Do YYYY');
+})
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
