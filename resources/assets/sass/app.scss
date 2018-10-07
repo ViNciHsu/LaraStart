@@ -7,10 +7,11 @@
 $fa-font-path:"../webfonts";
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
 // 增加admin-lte的css,引入node_modules內的檔案
 @import '~admin-lte/dist/css/adminlte.css';
 
-// 引用fontawesome
+// 引用fortawesome
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
@@ -18,4 +19,9 @@ $fa-font-path:"../webfonts";
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.router-link-active{
+    background-color: #3f51b5;
+    color: #fff !important;
 }
