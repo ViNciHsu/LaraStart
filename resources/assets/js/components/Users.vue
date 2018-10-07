@@ -129,8 +129,12 @@
                 axios.get("api/user").then(({data}) => (this.users = data.data));
             },
             createUser(){
+                // Progress bar start
+                this.$Progress.start()
                 // submit the form via a POST request
                 this.form.post('api/user');
+                // Progress bar finish
+                this.$Progress.finish()
 
             }
         },
