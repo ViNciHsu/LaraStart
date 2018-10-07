@@ -19,4 +19,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+// HTML5 History Mode, mode: 'history'
 Route::get('{path}', 'HomeController@index')->where('path', '([A-z\d-\/_.]+)?');
