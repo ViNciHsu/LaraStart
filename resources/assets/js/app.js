@@ -8,6 +8,12 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import { Form, HasError, AlertError } from 'vform';
+
+window.Form = Form; // Form指import的Form,window.Form,F要大寫,Users.vue在NewForm時才會成功
+Vue.component(HasError.name, HasError)
+Vue.component(AlertError.name, AlertError)
+
 
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
