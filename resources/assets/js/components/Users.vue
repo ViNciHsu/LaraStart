@@ -146,6 +146,8 @@
         },
         created() {
             this.loadUsers()
+            // Send HTTP Request Every 3 Seconds to Update Data
+            setInterval(() => this.loadUsers(),3000)
         }
     }
 </script>
