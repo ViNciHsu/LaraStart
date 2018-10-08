@@ -31,11 +31,11 @@
                                 <td>{{user.type | upText}}</td>
                                 <td>{{user.created_at | myDate}}</td>
                                 <td>
-                                    <a href="">
+                                    <a href="#">
                                         <i class="fa fa-edit blue"></i>
                                     </a>
                                     /
-                                    <a href="">
+                                    <a href="#" @click="deleteUser(user.id)">
                                         <i class="fa fa-trash red"></i>
                                     </a>
                                 </td>
@@ -125,29 +125,64 @@
             }
         },
         methods:{
+            // delete user by id
+            deleteUser(id){
+                swal({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+
+                    // send request to the server
+                    if(result.value) {
+                        this.form.delete('api/user/' + id).then(() => {
+                            swal(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            )
+                            Fire.$emit('AfterCreate');
+                        }).catch(() => {
+                            swal("Failed!", "There was something wrong.", "waring");
+                        })
+                    }
+                })
+            },
+            // display users list
             loadUsers(){
                 axios.get("api/user").then(({data}) => (this.users = data.data));
             },
+            // create new user
             createUser(){
                 // Progress bar start
                 this.$Progress.start();
                 // submit the form via a POST request
-                this.form.post('api/user');
-                // 使用CustomEvent在新增後發送HTTP請求
-                Fire.$emit('AfterCreate');
-
-                $('#addNew').modal('hide');
-                toast({
-                    type: 'success',
-                    title: 'User Created in successfully'
-                });
-
-                // Progress bar finish
-                this.$Progress.finish();
+                this.form.post('api/user')
+                .then(()=>{
+                    // 使用CustomEvent在新增後發送HTTP請求
+                    Fire.$emit('AfterCreate');
+                    $('#addNew').modal('hide');
+                    toast({
+                        type: 'success',
+                        title: 'User Created in successfully'
+                    });
+                    // Progress bar finish
+                    this.$Progress.finish();
+                })
+                .catch(()=>{
+                    // progress bar show the red bar
+                    this.$Progress.fail();
+                })
             }
         },
+
         created() {
             this.loadUsers();
+            // send HTTP Request by CustomEvent
             Fire.$on('AfterCreate',() => {
                 this.loadUsers();
             });

@@ -71672,38 +71672,73 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
-        loadUsers: function loadUsers() {
+        // delete user by id
+        deleteUser: function deleteUser(id) {
             var _this = this;
+
+            swal({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function (result) {
+
+                // send request to the server
+                if (result.value) {
+                    _this.form.delete('api/user/' + id).then(function () {
+                        swal('Deleted!', 'Your file has been deleted.', 'success');
+                        Fire.$emit('AfterCreate');
+                    }).catch(function () {
+                        swal("Failed!", "There was something wrong.", "waring");
+                    });
+                }
+            });
+        },
+
+        // display users list
+        loadUsers: function loadUsers() {
+            var _this2 = this;
 
             axios.get("api/user").then(function (_ref) {
                 var data = _ref.data;
-                return _this.users = data.data;
+                return _this2.users = data.data;
             });
         },
+
+        // create new user
         createUser: function createUser() {
+            var _this3 = this;
+
             // Progress bar start
             this.$Progress.start();
             // submit the form via a POST request
-            this.form.post('api/user');
-            // 使用CustomEvent在新增後發送HTTP請求
-            Fire.$emit('AfterCreate');
-
-            $('#addNew').modal('hide');
-            toast({
-                type: 'success',
-                title: 'User Created in successfully'
+            this.form.post('api/user').then(function () {
+                // 使用CustomEvent在新增後發送HTTP請求
+                Fire.$emit('AfterCreate');
+                $('#addNew').modal('hide');
+                toast({
+                    type: 'success',
+                    title: 'User Created in successfully'
+                });
+                // Progress bar finish
+                _this3.$Progress.finish();
+            }).catch(function () {
+                // progress bar show the red bar
+                _this3.$Progress.fail();
             });
-
-            // Progress bar finish
-            this.$Progress.finish();
         }
     },
+
     created: function created() {
-        var _this2 = this;
+        var _this4 = this;
 
         this.loadUsers();
+        // send HTTP Request by CustomEvent
         Fire.$on('AfterCreate', function () {
-            _this2.loadUsers();
+            _this4.loadUsers();
         });
         // Send HTTP Request Every 3 Seconds to Update Data,但浪費效能
         // setInterval(() => this.loadUsers(),3000)
@@ -71745,7 +71780,24 @@ var render = function() {
                         _vm._v(_vm._s(_vm._f("myDate")(user.created_at)))
                       ]),
                       _vm._v(" "),
-                      _vm._m(2, true)
+                      _c("td", [
+                        _vm._m(2, true),
+                        _vm._v(
+                          "\n                                /\n                                "
+                        ),
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "#" },
+                            on: {
+                              click: function($event) {
+                                _vm.deleteUser(user.id)
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "fa fa-trash red" })]
+                        )
+                      ])
                     ])
                   })
                 ],
@@ -72070,16 +72122,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("a", { attrs: { href: "" } }, [
-        _c("i", { staticClass: "fa fa-edit blue" })
-      ]),
-      _vm._v(
-        "\n                                /\n                                "
-      ),
-      _c("a", { attrs: { href: "" } }, [
-        _c("i", { staticClass: "fa fa-trash red" })
-      ])
+    return _c("a", { attrs: { href: "#" } }, [
+      _c("i", { staticClass: "fa fa-edit blue" })
     ])
   },
   function() {
