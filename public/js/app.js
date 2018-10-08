@@ -71666,6 +71666,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             editmode: false,
             users: {},
             form: new Form({
+                id: '', // 此處有從DB獲取id,methods內才能使用id
                 name: '',
                 email: '',
                 password: '',
@@ -71677,12 +71678,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
-        updateUser: function updateUser() {
-            console.log('editing data');
+        updateUser: function updateUser(id) {
+            var _this = this;
+
+            // Progress bar start
+            this.$Progress.start();
+            // console.log('editing data');
+            this.form.put('api/user/' + this.form.id).then(function () {
+                // success
+                $('#addNew').modal('hide'); // 修改成功就收起modal
+                swal('Updated!', 'Information has been updated.', 'success');
+                _this.$Progress.finish();
+                // 定義在app.js,做完某動作後刷新頁面
+                Fire.$emit('AfterCreate');
+            }).catch(function () {
+                // fail
+                // Progress bar start
+                _this.$Progress.fail();
+            });
         },
         editModal: function editModal(user) {
             this.editmode = true, this.form.reset();
             $('#addNew').modal('show');
+            // 點擊edit會出現對應的使用者資料
             this.form.fill(user);
         },
         newModal: function newModal() {
@@ -71692,7 +71710,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         // delete user by id
         deleteUser: function deleteUser(id) {
-            var _this = this;
+            var _this2 = this;
 
             swal({
                 title: 'Are you sure?',
@@ -71706,7 +71724,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 // send request to the server
                 if (result.value) {
-                    _this.form.delete('api/user/' + id).then(function () {
+                    _this2.form.delete('api/user/' + id).then(function () {
                         swal('Deleted!', 'Your file has been deleted.', 'success');
                         // 定義在app.js,做完某動作後刷新頁面
                         Fire.$emit('AfterCreate');
@@ -71719,17 +71737,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         // display users list
         loadUsers: function loadUsers() {
-            var _this2 = this;
+            var _this3 = this;
 
             axios.get("api/user").then(function (_ref) {
                 var data = _ref.data;
-                return _this2.users = data.data;
+                return _this3.users = data.data;
             });
         },
 
         // create new user
         createUser: function createUser() {
-            var _this3 = this;
+            var _this4 = this;
 
             // Progress bar start
             this.$Progress.start();
@@ -71744,21 +71762,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     title: 'User Created in successfully'
                 });
                 // Progress bar finish
-                _this3.$Progress.finish();
+                _this4.$Progress.finish();
             }).catch(function () {
                 // progress bar show the red bar
-                _this3.$Progress.fail();
+                _this4.$Progress.fail();
             });
         }
     },
 
     created: function created() {
-        var _this4 = this;
+        var _this5 = this;
 
         this.loadUsers();
         // send HTTP Request by CustomEvent
         Fire.$on('AfterCreate', function () {
-            _this4.loadUsers();
+            _this5.loadUsers();
         });
         // Send HTTP Request Every 3 Seconds to Update Data,但浪費效能
         // setInterval(() => this.loadUsers(),3000)

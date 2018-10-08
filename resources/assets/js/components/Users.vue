@@ -120,6 +120,7 @@
                 editmode : false,
                 users : {},
                 form : new Form({
+                    id : '',// 此處有從DB獲取id,methods內才能使用id
                     name : '',
                     email : '',
                     password : '',
@@ -130,13 +131,34 @@
             }
         },
         methods:{
-            updateUser(){
-                console.log('editing data')
+            updateUser(id){
+                // Progress bar start
+                this.$Progress.start();
+                // console.log('editing data');
+                this.form.put('api/user/'+this.form.id)
+                    .then(() => {
+                        // success
+                        $('#addNew').modal('hide');// 修改成功就收起modal
+                        swal(
+                            'Updated!',
+                            'Information has been updated.',
+                            'success'
+                        );
+                        this.$Progress.finish();
+                        // 定義在app.js,做完某動作後刷新頁面
+                        Fire.$emit('AfterCreate');
+                    })
+                    .catch(() => {
+                        // fail
+                        // Progress bar start
+                        this.$Progress.fail();
+                    })
             },
             editModal(user){
                 this.editmode = true,
                 this.form.reset();
                 $('#addNew').modal('show');
+                // 點擊edit會出現對應的使用者資料
                 this.form.fill(user);
             },
             newModal(){
@@ -164,7 +186,7 @@
                                 'Deleted!',
                                 'Your file has been deleted.',
                                 'success'
-                            );
+                            )
                             // 定義在app.js,做完某動作後刷新頁面
                             Fire.$emit('AfterCreate');
                         }).catch(() => {
