@@ -16,7 +16,8 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('api');
+        // 保護應用程序和申請人以外的任何人都沒有權力訪問你的數據,除非你給它們token
+        $this->middleware('auth:api');
     }
 
     /**
