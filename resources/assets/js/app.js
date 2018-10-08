@@ -59,10 +59,15 @@ Vue.filter('upText', function (text) {
     // https://vuejs.org/v2/guide/filters.html#ad
     return text.charAt(0).toUpperCase() + text.slice(1)
 });
-
+// 轉換日期格式
 Vue.filter('myDate',function (created) {
     return moment(created).format('MMMM Do YYYY');
 })
+
+// 使用CustomEvent發送HTTP請求
+window.Fire = new Vue();
+
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

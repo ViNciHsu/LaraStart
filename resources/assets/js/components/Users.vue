@@ -130,24 +130,29 @@
             },
             createUser(){
                 // Progress bar start
-                this.$Progress.start()
+                this.$Progress.start();
                 // submit the form via a POST request
                 this.form.post('api/user');
+                // 使用CustomEvent在新增後發送HTTP請求
+                Fire.$emit('AfterCreate');
 
-                $('#addNew').modal('hide')
+                $('#addNew').modal('hide');
                 toast({
                     type: 'success',
                     title: 'User Created in successfully'
-                })
+                });
 
                 // Progress bar finish
-                this.$Progress.finish()
+                this.$Progress.finish();
             }
         },
         created() {
-            this.loadUsers()
-            // Send HTTP Request Every 3 Seconds to Update Data
-            setInterval(() => this.loadUsers(),3000)
+            this.loadUsers();
+            Fire.$on('AfterCreate',() => {
+                this.loadUsers();
+            });
+            // Send HTTP Request Every 3 Seconds to Update Data,但浪費效能
+            // setInterval(() => this.loadUsers(),3000)
         }
     }
 </script>

@@ -30452,10 +30452,13 @@ Vue.filter('upText', function (text) {
     // https://vuejs.org/v2/guide/filters.html#ad
     return text.charAt(0).toUpperCase() + text.slice(1);
 });
-
+// 轉換日期格式
 Vue.filter('myDate', function (created) {
     return __WEBPACK_IMPORTED_MODULE_0_moment___default()(created).format('MMMM Do YYYY');
 });
+
+// 使用CustomEvent發送HTTP請求
+window.Fire = new Vue();
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -71682,6 +71685,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$Progress.start();
             // submit the form via a POST request
             this.form.post('api/user');
+            // 使用CustomEvent在新增後發送HTTP請求
+            Fire.$emit('AfterCreate');
 
             $('#addNew').modal('hide');
             toast({
@@ -71697,10 +71702,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _this2 = this;
 
         this.loadUsers();
-        // Send HTTP Request Every 3 Seconds to Update Data
-        setInterval(function () {
-            return _this2.loadUsers();
-        }, 3000);
+        Fire.$on('AfterCreate', function () {
+            _this2.loadUsers();
+        });
+        // Send HTTP Request Every 3 Seconds to Update Data,但浪費效能
+        // setInterval(() => this.loadUsers(),3000)
     }
 });
 
