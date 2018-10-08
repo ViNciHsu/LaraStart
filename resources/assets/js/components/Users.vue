@@ -7,7 +7,8 @@
                         <h3 class="card-title">Users Table</h3>
 
                         <div class="card-tools">
-                            <button class="btn btn-success" data-toggle="modal" data-target="#addNew">Add New <i class="fa fa-user-plus"></i></button>
+                            <!--<button class="btn btn-success" data-toggle="modal" data-target="#addNew">Add New <i class="fa fa-user-plus"></i></button>-->
+                            <button class="btn btn-success" @click="newModal()">Add New <i class="fa fa-user-plus"></i></button>
 
                         </div>
                     </div>
@@ -31,7 +32,7 @@
                                 <td>{{user.type | upText}}</td>
                                 <td>{{user.created_at | myDate}}</td>
                                 <td>
-                                    <a href="#">
+                                    <a href="#" @click="editModal(user)">
                                         <i class="fa fa-edit blue"></i>
                                     </a>
                                     /
@@ -125,6 +126,16 @@
             }
         },
         methods:{
+            editModal(user){
+                this.form.reset();
+                $('#addNew').modal('show');
+                this.form.fill(user);
+            },
+            newModal(){
+                this.form.reset();
+                $('#addNew').modal('show');
+
+            },
             // delete user by id
             deleteUser(id){
                 swal({
@@ -144,7 +155,8 @@
                                 'Deleted!',
                                 'Your file has been deleted.',
                                 'success'
-                            )
+                            );
+                            // 定義在app.js,做完某動作後刷新頁面
                             Fire.$emit('AfterCreate');
                         }).catch(() => {
                             swal("Failed!", "There was something wrong.", "waring");
@@ -165,6 +177,7 @@
                 .then(()=>{
                     // 使用CustomEvent在新增後發送HTTP請求
                     Fire.$emit('AfterCreate');
+                    // modal在發送請求後關起來
                     $('#addNew').modal('hide');
                     toast({
                         type: 'success',
