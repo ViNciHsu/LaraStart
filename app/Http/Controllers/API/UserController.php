@@ -83,6 +83,11 @@ class UserController extends Controller
             // Image前面加\ ,最上面use沒有引用任何Image
             \Image::make($request->photo)->save(public_path('img/profile/').$name);
             $request->merge(['photo' => $name]);
+
+            $userPhoto = public_path('img/profile/').$currentPhoto;
+            if(file_exists($userPhoto)){
+                @unlink($userPhoto);
+            }
         }
 
         // 檢查密碼欄位是否有變更,如果有,就加密再修改

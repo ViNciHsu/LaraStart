@@ -89,9 +89,9 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="inputExperience" class="col-sm-2 control-label">Experience</label>
+                                            <label for="bio" class="col-sm-2 control-label">Experience</label>
                                             <div class="col-sm-12">
-                                                <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
+                                                <textarea class="form-control" v-model="form.bio"  id="bio" placeholder="Experience"></textarea>
                                             </div>
                                         </div>
 
