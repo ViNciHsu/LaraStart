@@ -155,14 +155,14 @@
                     })
             },
             editModal(user){
-                this.editmode = true,
+                this.editmode = true;
                 this.form.reset();
                 $('#addNew').modal('show');
                 // 點擊edit會出現對應的使用者資料
                 this.form.fill(user);
             },
             newModal(){
-                this.editmode = false,
+                this.editmode = false;
                 this.form.reset();
                 $('#addNew').modal('show');
 
@@ -171,22 +171,22 @@
             deleteUser(id){
                 swal({
                     title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
+                    text: "You won't be able to revert this !",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
+                    confirmButtonText: 'Yes, delete it !'
                 }).then((result) => {
 
                     // send request to the server
                     if(result.value) {
                         this.form.delete('api/user/' + id).then(() => {
                             swal(
-                                'Deleted!',
+                                'Deleted !',
                                 'Your file has been deleted.',
                                 'success'
-                            )
+                            );
                             // 定義在app.js,做完某動作後刷新頁面
                             Fire.$emit('AfterCreate');
                         }).catch(() => {
