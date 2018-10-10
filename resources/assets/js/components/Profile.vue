@@ -2,11 +2,12 @@
 .widget-user-header{
     background-position: center center;
     background-size: cover;
-    height: 500px;
+    /* 有加!important,有更高的優先權,背景圖高度才會變 */
+    height: 250px !important;
 }
 
-.activity{
-    /*margin-left: 10%;*/
+.widget-user .card-footer{
+    padding: 0;
 }
 </style>
 <template>
@@ -20,7 +21,7 @@
                         <h5 class="widget-user-desc">Web Designer</h5>
                     </div>
                     <div class="widget-user-image">
-                        <img class="img-circle" src="" alt="User Avatar">
+                        <img class="img-circle" :src="getProfilePhoto()" alt="User Avatar">
                     </div>
                     <div class="">
                         <div class="row">
@@ -150,11 +151,19 @@
             console.log('Component mounted.')
         },
         methods:{
+            getProfilePhoto(){
+                // 因為base64編碼很長,因此此處使用三元運算判定,如果長度太長,就從資料庫抓photo的名字
+                let photo = (this.form.photo.length > 200) ? this.form.photo: "img/profile/"+ this.form.photo;
+                return photo;
+            },
             updateInfo(){
                 this.$Progress.start();
+                if(this.form.password == ''){
+                    this.form.password = undefined;
+                }
                 this.form.put('api/profile/')
                     .then(()=>{
-
+                        Fire.$emit('AfterCreate');
                         this.$Progress.finish();
                     })
                     .catch(()=>{
