@@ -96,7 +96,7 @@
                                         <div class="form-group">
                                             <label for="photo" class="col-sm-2 control-label">Profile Photo</label>
                                             <div class="col-sm-12">
-                                                <input type="file" class="form-input" id="photo" name="photo">
+                                                <input type="file" @change="updateProfile" class="form-input" id="photo" name="photo">
                                             </div>
                                         </div>
 
@@ -109,7 +109,8 @@
 
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-12">
-                                                <button type="submit" class="btn btn-success">Update</button>
+                                                <!-- 加上prevent不會刷新頁面-->
+                                                <button @click.prevent="updateInfo" type="submit" class="btn btn-success">Update</button>
                                             </div>
                                         </div>
                                     </form>
@@ -144,6 +145,30 @@
         },
         mounted() {
             console.log('Component mounted.')
+        },
+        methods:{
+            updateInfo(){
+                this.form.put('api/profile/')
+                    .then(()=>{
+
+                    })
+                    .catch(()=>{
+
+                    })
+            },
+            // file Upload with Base64
+            updateProfile(e){
+                // console.log('uploading');
+                let file = e.target.files[0];
+                // console.log(file);
+                let reader = new FileReader();
+                // let
+                reader.onloadend = (file) =>{
+                    // console.log('RESULT',reader.result)
+                    this.form.photo = reader.result;
+                };
+                reader.readAsDataURL(file);
+            }
         },
 
         created() {

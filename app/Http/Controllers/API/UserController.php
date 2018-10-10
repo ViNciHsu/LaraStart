@@ -65,6 +65,22 @@ class UserController extends Controller
         return auth('api')->user();
     }
 
+    // updateProfile
+    public function updateProfile(Request $request)
+    {
+        $user = auth('api')->user();
+
+        if($request->photo){
+            $name = time().'.'.explode('/',explode(':',substr($request->photo,0,strpos($request->photo,';')))[1])[1];
+            // Image前面加\ ,最上面use沒有引用任何Image
+            \Image::make($request->photo)->save(public_path('img/profile/').$name);
+
+        }
+
+        return $request->photo;
+//        return ['message' => 'Success'];
+    }
+
     /**
      * Display the specified resource.
      *
