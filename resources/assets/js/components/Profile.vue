@@ -75,14 +75,16 @@
                                         <div class="form-group">
                                             <label for="name" class="col-sm-2 control-label">Name</label>
                                             <div class="col-sm-12">
-                                                <input type="name" v-model="form.name" class="form-control" id="name" placeholder="name">
+                                                <input type="name" v-model="form.name" class="form-control"  id="name" placeholder="name" :class="{ 'is-invalid': form.errors.has('name') }">
+                                                <has-error :form="form" field="name"></has-error>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="email" class="col-sm-2 control-label">Email</label>
                                             <div class="col-sm-12">
-                                                <input type="email" v-model="form.email" class="form-control" id="email" placeholder="email">
+                                                <input type="email" v-model="form.email" class="form-control" id="email" placeholder="email" :class="{ 'is-invalid': form.errors.has('email') }">
+                                                <has-error :form="form" field="email"></has-error>
                                             </div>
                                         </div>
 
@@ -103,7 +105,8 @@
                                         <div class="form-group">
                                             <label for="password" class="col-sm-12 control-label">Password (leave empty if not changing)</label>
                                             <div class="col-sm-12">
-                                                <input type="password" class="form-control" id="password" placeholder="password">
+                                                <input type="password" v-model="form.password" class="form-control" id="password" placeholder="password" :class="{ 'is-invalid': form.errors.has('password') }">
+                                                <has-error :form="form" field="password"></has-error>
                                             </div>
                                         </div>
 
@@ -165,6 +168,7 @@
                 console.log(file);
                 let reader = new FileReader();
 
+                // Checking File Size While Uploading Limit to less than 2MB
                 if(file['size'] < 2111775) {
                     reader.onloadend = (file) => {
                         // console.log('RESULT',reader.result)

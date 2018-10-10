@@ -70,12 +70,27 @@ class UserController extends Controller
     {
         $user = auth('api')->user();
 
-        if($request->photo){
+        $this->validate($request,[
+            'name' => 'required|string|max:191',
+            'email' => 'required|string|max:191|email|unique:users,email,'.$user->id,
+            'password' => 'sometimes|required|min:6',
+        ]);
+
+        $currentPhoto = $user->photo;
+
+        if($request->photo != $currentPhoto){
             $name = time().'.'.explode('/',explode(':',substr($request->photo,0,strpos($request->photo,';')))[1])[1];
             // Image前面加\ ,最上面use沒有引用任何Image
             \Image::make($request->photo)->save(public_path('img/profile/').$name);
-
+            $request->merge(['photo' => $name]);
         }
+
+        // 檢查密碼欄位是否有變更,如果有,就加密再修改
+        if(!empty($request->password)){
+            $request->merge(['password' => Hash::make($request['password'])]);
+        }
+
+        $user->update($request->all());
 
         return $request->photo;
 //        return ['message' => 'Success'];
