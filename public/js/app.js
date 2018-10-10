@@ -72979,32 +72979,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         updateInfo: function updateInfo() {
-            this.form.put('api/profile/').then(function () {}).catch(function () {});
+            var _this = this;
+
+            this.$Progress.start();
+            this.form.put('api/profile/').then(function () {
+
+                _this.$Progress.finish();
+            }).catch(function () {
+                _this.$Progress.fail();
+            });
         },
 
         // file Upload with Base64
         updateProfile: function updateProfile(e) {
-            var _this = this;
+            var _this2 = this;
 
             // console.log('uploading');
             var file = e.target.files[0];
-            // console.log(file);
+            console.log(file);
             var reader = new FileReader();
-            // let
-            reader.onloadend = function (file) {
-                // console.log('RESULT',reader.result)
-                _this.form.photo = reader.result;
-            };
-            reader.readAsDataURL(file);
+
+            if (file['size'] < 2111775) {
+                reader.onloadend = function (file) {
+                    // console.log('RESULT',reader.result)
+                    _this2.form.photo = reader.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                swal({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'You are uploading a large file !'
+                });
+            }
         }
     },
 
     created: function created() {
-        var _this2 = this;
+        var _this3 = this;
 
         axios.get("api/profile").then(function (_ref) {
             var data = _ref.data;
-            return _this2.form.fill(data);
+            return _this3.form.fill(data);
         });
     }
 });
