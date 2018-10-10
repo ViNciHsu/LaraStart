@@ -72138,22 +72138,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             swal({
                 title: 'Are you sure?',
-                text: "You won't be able to revert this !",
+                text: "You won't be able to revert this!",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it !'
+                confirmButtonText: 'Yes, delete it!'
             }).then(function (result) {
 
                 // send request to the server
                 if (result.value) {
                     _this2.form.delete('api/user/' + id).then(function () {
-                        swal('Deleted !', 'Your file has been deleted.', 'success');
+                        swal('Deleted!', 'Your file has been deleted.', 'success');
                         // 定義在app.js,做完某動作後刷新頁面
                         Fire.$emit('AfterCreate');
                     }).catch(function () {
-                        swal("Failed!", "There was something wrong.", "waring");
+                        swal('Failed!', 'There was something wrong.', 'warning');
                     });
                 }
             });
@@ -72995,8 +72995,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.form.password = undefined;
             }
             this.form.put('api/profile/').then(function () {
-                Fire.$emit('AfterCreate');
                 _this.$Progress.finish();
+                Fire.$emit('AfterCreate');
             }).catch(function () {
                 _this.$Progress.fail();
             });

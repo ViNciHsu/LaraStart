@@ -171,27 +171,31 @@
             deleteUser(id){
                 swal({
                     title: 'Are you sure?',
-                    text: "You won't be able to revert this !",
+                    text: "You won't be able to revert this!",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it !'
+                    confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
 
                     // send request to the server
                     if(result.value) {
                         this.form.delete('api/user/' + id).then(() => {
                             swal(
-                                'Deleted !',
+                                'Deleted!',
                                 'Your file has been deleted.',
                                 'success'
-                            );
+                            )
                             // 定義在app.js,做完某動作後刷新頁面
                             Fire.$emit('AfterCreate');
                         }).catch(() => {
-                            swal("Failed!", "There was something wrong.", "waring");
-                        })
+                            swal(
+                                'Failed!',
+                                'There was something wrong.',
+                                'warning'
+                            );
+                        });
                     }
                 })
             },
